@@ -1,0 +1,43 @@
+name: Database integrity
+
+on:
+  push:
+    branches: [main, "foundation/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  postgres-integrity:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: consciousness_engine
+          POSTGRES_USER: cee
+          POSTGRES_PASSWORD: cee_dev_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cee -d consciousness_engine"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
+
+    env:
+      DATABASE_URL: postgresql://cee:cee_dev_only@localhost:5432/consciousness_engine
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Run database integrity suite
+        run: bash scripts/test-db.sh
