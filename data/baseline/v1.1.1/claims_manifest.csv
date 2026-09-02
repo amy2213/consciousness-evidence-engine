@@ -1,0 +1,28 @@
+claim_id,theory_id,claim_type,roles,target_relevance,ps,ed,ci,ir,rd,rr,esi,sti,rps,cmc,of
+GNW-1,GNWT,M,ACC,Consciousness-adjacent mechanism,3,3,2,3,2,1,10,4,14,3,3
+GNW-2,GNWT,N,ACC,Direct consciousness/access claim,3,3,2,2,2,1,9,4,13,2,2
+GNW-3,GNWT,P,PHEN,Direct phenomenal claim,1,1,0,1,0,1,2,2,4,1,1
+IIT-1,IIT,M,INT,Substrate/formal enabling mechanism,4,3,0,3,1,2,7,6,13,2,2
+IIT-2,IIT,B,BND,Direct subject-boundary claim,3,1,0,1,1,1,3,4,7,1,1
+IIT-3,IIT,C,GEN/PHEN,Direct phenomenal-content identity claim,3,1,0,1,1,0,3,3,6,1,2
+IIT-4,IIT,P,PHEN,Direct phenomenal identity claim,3,0,0,1,0,1,1,4,5,0,1
+RPT-1,RPT,M,GEN/INT,Consciousness-adjacent mechanism,3,3,2,3,2,1,10,4,14,3,3
+RPT-2,RPT,N,GEN/INT,Direct perceptual-consciousness claim,3,3,2,2,1,1,8,4,12,2,2
+RPT-3,RPT,S,GEN/PHEN,Direct phenomenal sufficiency claim,2,1,0,1,1,1,3,3,6,1,2
+HOT-1,HOT,M,META,Direct awareness mechanism claim,2,2,1,2,1,2,6,4,10,2,2
+HOT-2,HOT,N,META,Direct necessity claim,2,2,1,1,1,1,5,3,8,2,2
+HOT-3,HOT,C,META/GEN,Direct conscious-content claim,2,1,1,1,1,1,4,3,7,1,2
+PP-1,PP,M,GEN,General cognitive/perceptual mechanism,4,4,2,4,2,1,12,5,17,3,4
+PP-2,PP,C,GEN,Consciousness-adjacent content claim,3,3,1,3,2,1,9,4,13,3,3
+PP-3,PP,P,PHEN,Direct phenomenal claim,1,1,0,1,0,0,2,1,3,0,1
+AST-1,AST,M,META,Consciousness-adjacent self-model mechanism,2,2,1,1,1,2,5,4,9,2,2
+AST-2,AST,C,META,Consciousness-adjacent report/content claim,2,2,1,1,1,2,5,4,9,2,3
+AST-3,AST,P,PHEN,Direct phenomenal identity claim,1,1,0,1,0,1,2,2,4,0,1
+EM-1,EM,M,SUB/INT,Substrate-enabling mechanism,3,3,2,3,1,1,9,4,13,2,2
+EM-2,EM,N,SUB/INT,Direct consciousness-state/substrate claim,2,2,1,2,0,1,5,3,8,2,1
+EM-3,EM,S/C,SUB/GEN,Direct conscious-content sufficiency claim,2,1,0,1,0,0,2,2,4,1,2
+OR-1,OR,M,SUB,Substrate-enabling mechanism,3,2,1,1,1,1,5,4,9,1,2
+OR-2,OR,M,SUB,Substrate-enabling causal mechanism,2,2,1,0,0,1,3,3,6,1,1
+OR-3,OR,N,SUB/PHEN,Direct consciousness necessity claim,1,1,0,0,0,1,1,2,3,1,1
+OR-4,OR,M,SUB,Substrate/temporal mechanism claim,3,0,0,0,1,0,1,3,4,0,1
+OR-5,OR,C/P,PHEN/GEN,Direct phenomenal/content identity claim,1,0,0,0,0,0,0,1,1,0,0
