@@ -16,7 +16,7 @@ BEGIN
             preregistered, independent_replication, cmc
         ) VALUES (
             'TEST-CMC4-NO-CAUSE', 'SRC-001', 'ANESTHESIA', 'fixture',
-            FALSE, TRUE, 'TRUE', 'TRUE', '4'
+            'FALSE', TRUE, 'TRUE', 'TRUE', '4'
         );
         RAISE EXCEPTION 'TEST FAILURE: CMC4 without causal manipulation was accepted';
     EXCEPTION WHEN OTHERS THEN
@@ -34,7 +34,7 @@ BEGIN
             preregistered, independent_replication, cmc
         ) VALUES (
             'TEST-CMC4-NO-CONV', 'SRC-001', 'ANESTHESIA', 'fixture',
-            TRUE, FALSE, 'TRUE', 'TRUE', '4'
+            'TRUE', FALSE, 'TRUE', 'TRUE', '4'
         );
         RAISE EXCEPTION 'TEST FAILURE: CMC4 without convergence was accepted';
     EXCEPTION WHEN OTHERS THEN
@@ -52,7 +52,7 @@ BEGIN
             preregistered, independent_replication, cmc
         ) VALUES (
             'TEST-CMC4-NO-REP', 'SRC-001', 'ANESTHESIA', 'fixture',
-            TRUE, TRUE, 'FALSE', 'FALSE', '4'
+            'TRUE', TRUE, 'FALSE', 'FALSE', '4'
         );
         RAISE EXCEPTION 'TEST FAILURE: CMC4 without preregistration/replication was accepted';
     EXCEPTION WHEN OTHERS THEN
