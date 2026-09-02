@@ -1,6 +1,8 @@
 -- Normalize claim types before importing the v1.1.1 baseline.
 -- The frozen ledger contains atomic claims with compound classifications such as S/C and C/P.
 -- Storing a slash-delimited value would recreate the Word-era taxonomy drift in SQL.
+--
+-- Upgrade-safety rule: populate the referenced lookup before migrating any pre-existing claims.
 
 BEGIN;
 
@@ -9,6 +11,19 @@ CREATE TABLE claim_types (
     label TEXT NOT NULL UNIQUE,
     question TEXT NOT NULL
 );
+
+-- Seed the complete canonical lookup inside the migration so populated databases can be upgraded
+-- before the separate baseline taxonomy seed is applied.
+INSERT INTO claim_types (claim_type, label, question) VALUES
+('M','Mechanism','Does the proposed process occur and do the claimed operation?'),
+('N','Necessity','Can the target conscious property persist without it?'),
+('S','Sufficiency','Does selectively producing it create the target property?'),
+('C','Content','Does it predict which experience occurs?'),
+('B','Boundary','Does it identify which subsystem is the conscious subject?'),
+('P','Phenomenal','Does it explain why the process is experienced at all?')
+ON CONFLICT (claim_type) DO UPDATE SET
+    label = EXCLUDED.label,
+    question = EXCLUDED.question;
 
 CREATE TABLE claim_claim_types (
     claim_id TEXT NOT NULL REFERENCES claims(claim_id) ON DELETE CASCADE,
