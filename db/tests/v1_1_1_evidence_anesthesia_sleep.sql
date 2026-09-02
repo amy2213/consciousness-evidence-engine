@@ -61,3 +61,15 @@ SELECT 'cmc0_consciousness_laundering' AS violation, evidence_id AS detail
 FROM evidence
 WHERE evidence_id = 'AN-006'
   AND ledger_score_effect_text NOT ILIKE '%no consciousness-dependent variable%';
+
+-- AN-006 has a real intervention, but only at the substrate-mechanism level.
+SELECT 'an006_causal_scope' AS violation, evidence_id AS detail
+FROM evidence
+WHERE evidence_id='AN-006'
+  AND (causal_manipulation <> 'TRUE' OR causal_manipulation_scope <> 'SUBSTRATE_MECHANISM_ONLY');
+
+-- No CMC0 substrate assay may masquerade as a consciousness-sensitive causal manipulation.
+SELECT 'cmc0_consciousness_sensitive_scope' AS violation, evidence_id AS detail
+FROM evidence
+WHERE evidence_id ~ '^(AN|SL)-[0-9]{3}$'
+  AND cmc='0' AND causal_manipulation_scope='CONSCIOUSNESS_SENSITIVE_VARIABLE';
