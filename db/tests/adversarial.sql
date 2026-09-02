@@ -57,7 +57,7 @@ SELECT test_expect_failure(
 'A6_APPROVED_JSON_BYPASS',
 $q$INSERT INTO claim_evidence (claim_id,evidence_id,evaluation_version,relationship,interpretation,approved_score_change,review_status)
 VALUES ('TEST-CLAIM','TEST-BASE-EVIDENCE','hostile','SUPPORT','hostile','{"ED":4}'::jsonb,'APPROVED')$q$,
-'claim_evidence_approved_score_change_check');
+'approved_score_change_json_must_be_null');
 
 -- A7: audit history is append-only.
 INSERT INTO audit_log (entity_type,entity_id,action,reason,actor)
