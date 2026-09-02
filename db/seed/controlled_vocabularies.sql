@@ -1,10 +1,9 @@
 BEGIN;
 
-INSERT INTO target_relevance (target_relevance_id, label, description) VALUES
-('DIRECT_CONSCIOUSNESS', 'Direct consciousness claim', 'Evidence directly targets a claim about conscious state, content, subject, or phenomenality.'),
-('CONSCIOUSNESS_ADJACENT', 'Consciousness-adjacent mechanism', 'Evidence targets a mechanism closely associated with conscious access or processing but is not itself a consciousness criterion.'),
-('GENERAL_COGNITIVE', 'General cognitive/perceptual mechanism', 'Evidence targets cognition, perception, prediction, learning, memory, or related processing without consciousness specificity.'),
-('SUBSTRATE_ENABLING', 'Substrate-enabling mechanism', 'Evidence targets a physical or biological substrate that could enable a theory mechanism without independently establishing consciousness.');
+-- Target relevance is seeded by db/seed/v1_1_1_claim_taxonomy.sql on the
+-- v1.1.1 migration branch. Keeping a second generic target-relevance seed here
+-- creates competing IDs for identical labels and violates the unique label
+-- contract. Populations remain generic controlled vocabulary.
 
 INSERT INTO populations (population_id, name, description, translation_framework) VALUES
 ('ANESTHESIA', 'Anesthesia and emergence', 'Reversible pharmacological transitions in responsiveness and conscious-compatible neural dynamics.', 'state-transition'),
