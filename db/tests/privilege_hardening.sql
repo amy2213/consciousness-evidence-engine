@@ -48,8 +48,14 @@ FROM pg_tables t
 WHERE t.schemaname='public'
   AND has_table_privilege('cee_app_read', format('%I.%I',t.schemaname,t.tablename), 'INSERT,UPDATE,DELETE,TRUNCATE');
 
--- Release role remains read-only before Phase 5 release tables exist.
-SELECT 'RELEASE_ROLE_PREMATURE_WRITE' AS violation, t.tablename AS detail
+-- Phase 5 intentionally grants cee_release write access only to release-construction tables.
+-- It must remain unable to mutate scientific authority, approvals, provenance, or audit history.
+SELECT 'RELEASE_ROLE_UNAUTHORIZED_WRITE' AS violation, t.tablename AS detail
 FROM pg_tables t
 WHERE t.schemaname='public'
+  AND t.tablename NOT IN ('dataset_releases','release_membership','release_errata')
   AND has_table_privilege('cee_release', format('%I.%I',t.schemaname,t.tablename), 'INSERT,UPDATE,DELETE,TRUNCATE');
+
+SELECT 'RELEASE_ROLE_APPROVAL_WRITE' AS violation, v.table_name AS detail
+FROM (VALUES ('approval_events'),('provenance_events'),('audit_log'),('claims'),('evidence'),('claim_evidence'),('score_change_proposals')) v(table_name)
+WHERE has_table_privilege('cee_release', v.table_name, 'INSERT,UPDATE,DELETE,TRUNCATE');
