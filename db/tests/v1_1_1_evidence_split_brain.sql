@@ -7,14 +7,14 @@ HAVING count(*) <> 8;
 
 -- Exact source + CMC mapping.
 WITH expected(evidence_id,source_id,cmc) AS (VALUES
- ('BD-001','SRC-037','3'::scored_or_semantic),
- ('BD-002','SRC-038','3'::scored_or_semantic),
- ('BD-003','SRC-039','3'::scored_or_semantic),
- ('BD-004','SRC-040','2'::scored_or_semantic),
- ('BD-005','SRC-041','2'::scored_or_semantic),
- ('BD-006','SRC-042','3'::scored_or_semantic),
- ('BD-007','SRC-043','2'::scored_or_semantic),
- ('BD-008','SRC-044','1'::scored_or_semantic)
+ ('BD-001','SRC-037','3'::scored_or_semantic_code),
+ ('BD-002','SRC-038','3'::scored_or_semantic_code),
+ ('BD-003','SRC-039','3'::scored_or_semantic_code),
+ ('BD-004','SRC-040','2'::scored_or_semantic_code),
+ ('BD-005','SRC-041','2'::scored_or_semantic_code),
+ ('BD-006','SRC-042','3'::scored_or_semantic_code),
+ ('BD-007','SRC-043','2'::scored_or_semantic_code),
+ ('BD-008','SRC-044','1'::scored_or_semantic_code)
 )
 SELECT 'BD_MAPPING' AS violation, x.evidence_id AS detail
 FROM expected x
@@ -57,4 +57,4 @@ WHERE NOT EXISTS (SELECT 1 FROM evidence_unity_links WHERE evidence_id='BD-002' 
 -- BD-008 is the IIT-2 theoretical boundary commitment and must remain low-CMC.
 SELECT 'BD008_THEORY_BOUNDARY' AS violation, evidence_id AS detail
 FROM evidence
-WHERE evidence_id='BD-008' AND (source_id <> 'SRC-044' OR cmc <> '1'::scored_or_semantic);
+WHERE evidence_id='BD-008' AND (source_id <> 'SRC-044' OR cmc <> '1'::scored_or_semantic_code);
