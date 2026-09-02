@@ -22,53 +22,59 @@ run_zero_row_gate() {
   fi
 }
 
-echo "[1/16] Resetting public schema"
+echo "[1/18] Resetting public schema"
 "${PSQL[@]}" -c 'DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;'
 
-echo "[2/16] Applying base schema"
+echo "[2/18] Applying base schema"
 "${PSQL[@]}" -f db/schema.sql
 
-echo "[3/16] Applying migrations"
+echo "[3/18] Applying migrations"
 for migration in db/migrations/*.sql; do
   echo "  -> $migration"
   "${PSQL[@]}" -f "$migration"
 done
 
-echo "[4/16] Loading controlled vocabularies"
+echo "[4/18] Loading controlled vocabularies"
 "${PSQL[@]}" -f db/seed/controlled_vocabularies.sql
 
-echo "[5/16] Loading v1.1.1 claim taxonomy"
+echo "[5/18] Loading v1.1.1 claim taxonomy"
 "${PSQL[@]}" -f db/seed/v1_1_1_claim_taxonomy.sql
 
-echo "[6/16] Loading v1.1.1 authoritative sources"
+echo "[6/18] Loading v1.1.1 authoritative sources"
 "${PSQL[@]}" -f db/seed/v1_1_1_sources.sql
 
-echo "[7/16] Reconciling frozen v1.1.1 source registry"
+echo "[7/18] Reconciling frozen v1.1.1 source registry"
 run_zero_row_gate "Source reconciliation" db/tests/v1_1_1_sources.sql
 
-echo "[8/16] Loading frozen v1.1.1 canonical claims"
+echo "[8/18] Loading frozen v1.1.1 canonical claims"
 "${PSQL[@]}" -f db/seed/v1_1_1_claims.sql
 
-echo "[9/16] Reconciling frozen v1.1.1 claim ledger"
+echo "[9/18] Reconciling frozen v1.1.1 claim ledger"
 run_zero_row_gate "Claim reconciliation" db/tests/v1_1_1_manifest.sql
 
-echo "[10/16] Loading v1.1.1 claim-source provenance"
+echo "[10/18] Loading v1.1.1 claim-source provenance"
 "${PSQL[@]}" -f db/seed/v1_1_1_claim_source_links.sql
 
-echo "[11/16] Reconciling v1.1.1 claim-source provenance"
+echo "[11/18] Reconciling v1.1.1 claim-source provenance"
 run_zero_row_gate "Claim-source reconciliation" db/tests/v1_1_1_claim_source_links.sql
 
-echo "[12/16] Loading isolated test fixtures"
+echo "[12/18] Loading anesthesia + sleep atomic evidence"
+"${PSQL[@]}" -f db/seed/v1_1_1_evidence_anesthesia_sleep.sql
+
+echo "[13/18] Reconciling anesthesia + sleep atomic evidence"
+run_zero_row_gate "Atomic evidence reconciliation" db/tests/v1_1_1_evidence_anesthesia_sleep.sql
+
+echo "[14/18] Loading isolated test fixtures"
 "${PSQL[@]}" -f db/tests/fixtures.sql
 
-echo "[13/16] Running positive acceptance fixtures"
+echo "[15/18] Running positive acceptance fixtures"
 "${PSQL[@]}" -f db/tests/positive.sql
 
-echo "[14/16] Running invariant checks"
+echo "[16/18] Running invariant checks"
 run_zero_row_gate "Invariant" db/tests/invariants.sql
 
-echo "[15/16] Running adversarial corruption tests"
+echo "[17/18] Running adversarial corruption tests"
 "${PSQL[@]}" -f db/tests/adversarial.sql
 
-echo "[16/16] Database migration gate complete"
-echo "Database integrity and v1.1.1 source/claim/provenance reconciliation suite passed."
+echo "[18/18] Database migration gate complete"
+echo "Database integrity plus v1.1.1 source/claim/provenance/atomic-evidence reconciliation suite passed."
