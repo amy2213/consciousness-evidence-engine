@@ -119,12 +119,12 @@ BEGIN
 END $$;
 
 -- A8: Invalid semantic score is impossible at type level.
--- Expected PostgreSQL error: invalid input value for enum scored_or_semantic_code.
+-- Dynamic SQL postpones enum parsing until the inner block so the error can be caught.
 DO $$
 BEGIN
     BEGIN
-        EXECUTE $$INSERT INTO evidence(evidence_id, source_id, finding, cmc)
-                  VALUES ('TEST-BAD-CMC','SRC-001','fixture','HIGH')$$;
+        EXECUTE $sql$INSERT INTO evidence(evidence_id, source_id, finding, cmc)
+                     VALUES ('TEST-BAD-CMC','SRC-001','fixture','HIGH')$sql$;
         RAISE EXCEPTION 'TEST FAILURE: qualitative CMC was accepted';
     EXCEPTION WHEN OTHERS THEN
         IF SQLERRM LIKE 'TEST FAILURE:%' THEN RAISE; END IF;
