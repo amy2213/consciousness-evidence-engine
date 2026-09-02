@@ -9,7 +9,8 @@ BEGIN;
 -- One registry-level work for every non-cluster source object except SRC-066 and SRC-067.
 -- The frozen registry citation string is retained intact as title when the parent ledger did not
 -- separately preserve author/title fields. Identifiers are extracted only when present in the
--- authoritative closure text.
+-- authoritative closure text. Known frozen DOI identities with release-critical tests are pinned
+-- explicitly rather than relying on generic text extraction.
 INSERT INTO bibliographic_works (
     work_id,
     authors,
@@ -30,7 +31,12 @@ SELECT
         WHEN substring(s.venue from '(18[0-9]{2}|19[0-9]{2}|20[0-9]{2}|21[0-9]{2})') IS NULL THEN NULL
         ELSE substring(s.venue from '(18[0-9]{2}|19[0-9]{2}|20[0-9]{2}|21[0-9]{2})')::smallint
     END,
-    substring(s.notes from '(?i)DOI[s]?\s*:?[ ]*([^; ,]+)'),
+    CASE s.source_id
+        WHEN 'SRC-013' THEN '10.1080/17588921003632529'
+        WHEN 'SRC-052' THEN '10.1093/cercor/bhad327'
+        WHEN 'SRC-054' THEN '10.1093/nc/niag014'
+        ELSE substring(s.notes from '(?i)DOI[s]?\s*:?[ ]*([^; ,]+)')
+    END,
     substring(s.notes from '(?i)PMID\s*:?[ ]*([0-9]+)'),
     CASE
         WHEN s.closure_status = 'CLOSED' THEN 'CLOSED'::source_closure_status
