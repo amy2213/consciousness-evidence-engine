@@ -2,7 +2,7 @@ name: Database integrity
 
 on:
   push:
-    branches: [main, "foundation/**"]
+    branches: [main, "foundation/**", "migration/**"]
   pull_request:
 
 permissions:
@@ -38,6 +38,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql-client
+
+      - name: Run populated 0003 upgrade-path test
+        run: bash scripts/test-upgrade-0003.sh
 
       - name: Run database integrity suite
         run: bash scripts/test-db.sh
