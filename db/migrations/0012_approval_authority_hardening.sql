@@ -19,9 +19,10 @@ ALTER TABLE approval_events
     ADD COLUMN approval_scope approval_scope_code,
     ADD COLUMN score_change_id UUID REFERENCES score_change_proposals(score_change_id),
     ADD COLUMN entity_version TEXT,
-    ADD COLUMN scope_hash TEXT;
+    ADD COLUMN scope_hash TEXT,
+    ADD COLUMN provenance_event_id UUID REFERENCES provenance_events(provenance_event_id);
 
--- Backfill legacy rows conservatively if any exist before enforcing exact scope fields.
+-- Backfill legacy rows conservatively if any exist before enforcing exact scope/provenance fields.
 UPDATE approval_events
 SET approval_scope = CASE
         WHEN candidate_id IS NOT NULL THEN 'CANDIDATE_DISPOSITION'::approval_scope_code
@@ -30,9 +31,29 @@ SET approval_scope = CASE
     END,
     entity_version = COALESCE(entity_version, 'legacy-unversioned');
 
+WITH inserted AS (
+    INSERT INTO provenance_events (
+        provenance_event_id, entity_type, entity_id, actor_type, actor_identity,
+        action, metadata
+    )
+    SELECT
+        gen_random_uuid(), 'APPROVAL_EVENT', ae.approval_event_id::text,
+        'HUMAN'::provenance_actor_type, ae.approver_identity,
+        'LEGACY_APPROVAL_BACKFILL',
+        jsonb_build_object('migration','0012','legacy',true)
+    FROM approval_events ae
+    WHERE ae.provenance_event_id IS NULL
+    RETURNING provenance_event_id, entity_id
+)
+UPDATE approval_events ae
+SET provenance_event_id = i.provenance_event_id
+FROM inserted i
+WHERE ae.approval_event_id::text = i.entity_id;
+
 ALTER TABLE approval_events
     ALTER COLUMN approval_scope SET NOT NULL,
     ALTER COLUMN entity_version SET NOT NULL,
+    ALTER COLUMN provenance_event_id SET NOT NULL,
     ADD CONSTRAINT approval_human_actor_only CHECK (approver_actor_type = 'HUMAN'),
     ADD CONSTRAINT approval_reviewer_role_only CHECK (reviewer_role = 'APPROVER'),
     ADD CONSTRAINT approval_rationale_nonblank CHECK (btrim(rationale) <> ''),
@@ -68,6 +89,8 @@ COMMENT ON COLUMN approval_events.entity_version IS
 'Exact specification/evaluation/entity version to which this decision applies.';
 COMMENT ON COLUMN approval_events.scope_hash IS
 'Optional immutable hash binding the decision to an exact reviewed payload or scope manifest.';
+COMMENT ON COLUMN approval_events.provenance_event_id IS
+'Required provenance event binding the decision to the same human actor identity.';
 
 DROP TRIGGER IF EXISTS score_change_approval_actor_gate ON score_change_proposals;
 DROP FUNCTION IF EXISTS enforce_score_change_approval_actor();
@@ -94,11 +117,13 @@ CREATE TRIGGER approval_event_no_update_delete
 BEFORE UPDATE OR DELETE ON approval_events
 FOR EACH ROW EXECUTE FUNCTION prevent_approval_event_mutation();
 
--- Enforce reviewer independence for score-change decisions and bind the decision to exact proposal scope.
+-- Enforce human authority, provenance binding, and reviewer independence for score changes.
 CREATE OR REPLACE FUNCTION enforce_approval_authority()
 RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
     proposer_identity TEXT;
+    prov_actor_type provenance_actor_type;
+    prov_actor_identity TEXT;
 BEGIN
     IF NEW.approver_actor_type <> 'HUMAN' THEN
         RAISE EXCEPTION 'authoritative approval decisions require HUMAN actor type';
@@ -106,6 +131,19 @@ BEGIN
     IF NEW.reviewer_role <> 'APPROVER' THEN
         RAISE EXCEPTION 'authoritative approval decisions require APPROVER reviewer role';
     END IF;
+
+    SELECT actor_type, actor_identity
+    INTO prov_actor_type, prov_actor_identity
+    FROM provenance_events
+    WHERE provenance_event_id = NEW.provenance_event_id;
+
+    IF prov_actor_type IS NULL THEN
+        RAISE EXCEPTION 'authoritative approval decisions require provenance_event';
+    END IF;
+    IF prov_actor_type <> 'HUMAN' OR prov_actor_identity <> NEW.approver_identity THEN
+        RAISE EXCEPTION 'approval provenance must bind to the same HUMAN approver identity';
+    END IF;
+
     IF NEW.approval_scope = 'SCORE_CHANGE' THEN
         SELECT proposed_by INTO proposer_identity
         FROM score_change_proposals
@@ -180,5 +218,6 @@ $$;
 
 CREATE INDEX idx_approval_score_change ON approval_events(score_change_id);
 CREATE INDEX idx_approval_scope_version ON approval_events(approval_scope, entity_version);
+CREATE INDEX idx_approval_provenance ON approval_events(provenance_event_id);
 
 COMMIT;
