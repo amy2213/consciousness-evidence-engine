@@ -27,8 +27,8 @@ SELECT
     s.title,
     s.venue,
     CASE
-        WHEN substring(s.venue from '(18|19|20|21)[0-9]{2}') IS NULL THEN NULL
-        ELSE substring(s.venue from '(18|19|20|21)[0-9]{2}')::smallint
+        WHEN substring(s.venue from '(18[0-9]{2}|19[0-9]{2}|20[0-9]{2}|21[0-9]{2})') IS NULL THEN NULL
+        ELSE substring(s.venue from '(18[0-9]{2}|19[0-9]{2}|20[0-9]{2}|21[0-9]{2})')::smallint
     END,
     substring(s.notes from '(?i)DOI[s]?\s*:?[ ]*([^; ,]+)'),
     substring(s.notes from '(?i)PMID\s*:?[ ]*([0-9]+)'),
