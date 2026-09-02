@@ -1,13 +1,14 @@
 -- Positive fixtures prove that valid states are accepted, not merely that invalid states fail.
 
--- P1: CMC 4 is accepted when all structural hard-gate requirements are present.
+-- P1: CMC 4 is accepted when all structural hard-gate requirements are present,
+-- including causal manipulation of a consciousness-sensitive variable.
 INSERT INTO evidence (
     evidence_id, source_id, population_id, finding,
-    causal_manipulation, consciousness_sensitive_convergence,
+    causal_manipulation, causal_manipulation_scope, consciousness_sensitive_convergence,
     preregistered, independent_replication, cmc, oec, evidence_status
 ) VALUES (
     'TEST-CMC4-VALID', 'SRC-001', 'ANESTHESIA', 'Valid CMC4 fixture.',
-    'TRUE', TRUE, 'TRUE', 'FALSE', '4', 'NA', 'VALIDATED'
+    'TRUE', 'CONSCIOUSNESS_SENSITIVE_VARIABLE', TRUE, 'TRUE', 'FALSE', '4', 'NA', 'VALIDATED'
 );
 
 -- P2: An AI may propose a score change as long as it does not approve itself.
@@ -22,8 +23,8 @@ INSERT INTO score_change_proposals (
 
 -- P3: Semantic ND and NA are accepted and remain distinguishable.
 INSERT INTO evidence (
-    evidence_id, source_id, population_id, finding, causal_manipulation, cmc, oec, evidence_status
+    evidence_id, source_id, population_id, finding, causal_manipulation, causal_manipulation_scope, cmc, oec, evidence_status
 ) VALUES (
     'TEST-SEMANTIC-NULLS', 'SRC-001', 'ANESTHESIA',
-    'Fixture preserving ND versus NA.', 'ND', 'ND', 'NA', 'VALIDATED'
+    'Fixture preserving ND versus NA.', 'ND', 'UNRESOLVED', 'ND', 'NA', 'VALIDATED'
 );
