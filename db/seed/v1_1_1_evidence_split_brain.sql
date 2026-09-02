@@ -1,0 +1,40 @@
+-- Frozen atomic boundary evidence from Claim Ledger v1.1.1 Section 29.1.
+-- The source ledger does not specify intervention/design columns for this table;
+-- those fields are kept conservative rather than reconstructed from outside knowledge.
+BEGIN;
+
+INSERT INTO evidence (
+ evidence_id,source_id,population_id,design_class,intervention,sample_or_system,
+ measured_variable,finding,operational_class,causal_manipulation,preregistered,
+ independent_replication,cmc,oec,evidence_status,ledger_score_effect_text,
+ ledger_interpretation,ledger_version,source_artifact,source_locator,score_effect,provenance
+) VALUES
+('BD-001','SRC-037','SPLIT_BRAIN','Classic complete commissurotomy evidence','Surgical commissurotomy','Classic complete commissurotomy cases','Lateralized verbal/manual responses','Lateralized stimuli could support hemisphere-specific verbal/manual responses, motivating the classical dual-consciousness interpretation.','Boundary/access observation','ND','ND','ND','3','NA','VALIDATED','Strong evidence of divided access/control; subject number remains an inference.','BND/ACC; GNWT, IIT, RPT','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-002','SRC-038','SPLIT_BRAIN','Split-brain behavioral testing','Prior callosotomy','Pinto et al. 2017 split-brain patients','Presence, location, orientation, identity, hand/verbal response, cross-field comparison','Patients could indicate presence, location, orientation and identity across the visual field with either hand or verbally in several tasks despite impaired cross-field comparison.','Boundary/access/agency observation','FALSE','ND','ND','3','NA','VALIDATED','Challenges simple two-independent-agent model; supports split perception with residual agentive unity.','BND/ACC; GNWT, IIT','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-003','SRC-039','SPLIT_BRAIN','Consensus review','Prior callosotomy literature','Split-brain literature reviewed by de Haan et al. 2020','Functional integration from perception to attention and residual unified action/control','Callosotomy broadly disrupts functional integration from perception to attention, but some action control and other processes remain unified.','Consensus review','FALSE','ND','ND','3','NA','VALIDATED','Boundary is not identical to corpus-callosum continuity; residual integration routes matter.','BND/INT/ACC; all theories','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-004','SRC-040','SPLIT_BRAIN','Conceptual analysis of split-brain evidence','NA','Schechter & Bayne 2021 analysis','Agency unity versus experiential unity','Agency unity and experiential unity can dissociate; Pinto-style crossed responses do not settle whether phenomenal consciousness is fully unified.','Conceptual boundary analysis','FALSE','ND','ND','2','NA','VALIDATED','Prevents promotion from unified behavior to unified phenomenality.','BND/PHEN','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-005','SRC-041','SPLIT_BRAIN','Residual-transfer analysis','Prior callosotomy','Corballis et al. 2018 / subcortical-cross-cue analysis','Residual interhemispheric transfer routes','Residual interhemispheric transfer may arise from subcortical pathways, attentional transfer, or external cross-cueing.','Route-specific boundary analysis','FALSE','ND','ND','2','NA','VALIDATED','Requires route-specific controls before inferring preserved cortical unity.','BND/INT','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-006','SRC-042','SPLIT_BRAIN','Resting-state network study','Childhood hemispherectomy','Six adults with childhood hemispherectomy','Canonical resting-state network organization and between-network communication','Six adults with childhood hemispherectomy retained recognizable canonical resting-state network organization within one hemisphere, with increased between-network communication.','Hemispherectomy network observation','FALSE','ND','ND','3','NA','VALIDATED','Shows one hemisphere can reorganize a broad functional architecture; bilateral anatomy is not necessary for a coherent cognitive agent.','INT/BND; network theories','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-007','SRC-043','SPLIT_BRAIN','Hemispherectomy consciousness/plasticity review','Prior hemispherectomy','Hemispherectomy cases','Preserved cognition/conscious life after radical anatomical reduction','Patients with one cerebral hemisphere can exhibit preserved cognition and conscious life despite radical anatomical reduction; authors highlight implications for unity and network plasticity.','Review synthesis','FALSE','ND','ND','2','NA','VALIDATED','Supports plasticity and boundary flexibility; does not identify the constitutive boundary mechanism.','BND/INT/PHEN','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb),
+('BD-008','SRC-044','SPLIT_BRAIN','Theoretical boundary commitment','NA','IIT exclusion/boundary commitment','Predicted maximally irreducible complex and subject exclusion rule','IIT predicts a maximally irreducible complex that should identify the conscious subject and exclude overlapping alternatives.','Theory-derived boundary prediction','FALSE','ND','ND','1','NA','VALIDATED','High theoretical specificity, but exact biological complex calculations remain unavailable in these cases.','BND; IIT-2','v1.1.1','Consciousness_Evidence_Map_Claim_Ledger_v1.1.1.docx','Section 29.1','NONE','{"import":"v1.1.1","source_table":"29.1 Boundary evidence register"}'::jsonb);
+
+-- Unity mappings preserve the ledger's five-class audit rule.
+-- No non-phenomenal unity observation is granted a bridge to phenomenal subject unity.
+INSERT INTO evidence_unity_links (evidence_id,unity_class,relationship,bridge_to_phenomenal_established) VALUES
+('BD-001','ACCESS','Direct evidence of divided information access/control.',FALSE),
+('BD-002','ACCESS','Impaired cross-field comparison with substantial residual response access.',FALSE),
+('BD-002','AGENTIVE','Residual coordinated hand/verbal response supports agentive unity.',FALSE),
+('BD-003','CAUSAL_INFORMATIONAL','Callosotomy disrupts integration while residual routes/processes remain.',FALSE),
+('BD-003','ACCESS','Functional access is disrupted but not uniformly abolished.',FALSE),
+('BD-003','AGENTIVE','Some action control remains unified.',FALSE),
+('BD-004','AGENTIVE','Analyzes evidence for agency unity separately from experience.',FALSE),
+('BD-004','PHENOMENAL_SUBJECT','Phenomenal unity remains unresolved; the record is a constraint, not a positive subject-count result.',FALSE),
+('BD-005','CAUSAL_INFORMATIONAL','Residual transfer requires route-specific causal/informational accounting.',FALSE),
+('BD-006','ANATOMICAL','Radical bilateral anatomical reduction via hemispherectomy.',FALSE),
+('BD-006','CAUSAL_INFORMATIONAL','One hemisphere retains/reorganizes broad network organization.',FALSE),
+('BD-006','AGENTIVE','Supports coherent cognitive agency after hemispherectomy.',FALSE),
+('BD-007','ANATOMICAL','Conscious life can persist after radical anatomical reduction.',FALSE),
+('BD-007','PHENOMENAL_SUBJECT','Supports boundary flexibility but does not identify constitutive subject boundary.',FALSE),
+('BD-008','PHENOMENAL_SUBJECT','Explicit theoretical subject-boundary prediction, empirically unvalidated in these cases.',FALSE);
+
+COMMIT;
