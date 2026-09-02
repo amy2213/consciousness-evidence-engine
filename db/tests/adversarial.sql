@@ -80,7 +80,7 @@ SELECT test_expect_failure(
 'A9_AI_APPROVAL',
 $q$INSERT INTO approval_events (approval_event_id,evidence_id,decision,approver_identity,approver_actor_type,reviewer_role,approval_scope,entity_version,rationale,provenance_event_id)
 VALUES ('00000000-0000-0000-0000-000000000302','TEST-BASE-EVIDENCE','APPROVE','ai-reviewer','AI_MODEL','APPROVER','EVIDENCE_PROMOTION','unversioned','hostile','00000000-0000-0000-0000-000000000301')$q$,
-'approval_human_actor_only');
+'authoritative approval decisions require HUMAN actor type');
 
 -- A10: a human-looking approval cannot be backed by AI provenance.
 SELECT test_expect_failure(
