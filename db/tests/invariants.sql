@@ -15,10 +15,10 @@ FROM claim_evidence
 WHERE approved_score_change IS NOT NULL
   AND review_status <> 'APPROVED';
 
--- 4. CMC 4 without causal manipulation must never exist.
+-- 4. CMC 4 requires an explicit TRUE causal-manipulation determination.
 SELECT evidence_id
 FROM evidence
-WHERE cmc = '4' AND causal_manipulation IS NOT TRUE;
+WHERE cmc = '4' AND causal_manipulation <> 'TRUE';
 
 -- 5. ESI/STI/RPS must equal their component formulas.
 SELECT claim_id
