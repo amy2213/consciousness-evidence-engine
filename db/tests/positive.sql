@@ -11,7 +11,7 @@ INSERT INTO evidence (
     'TRUE', 'CONSCIOUSNESS_SENSITIVE_VARIABLE', TRUE, 'TRUE', 'FALSE', '4', 'NA', 'VALIDATED'
 );
 
--- P2: An AI may propose a score change as long as it does not approve itself.
+-- P2: AI may propose a score change. Proposal submission itself carries no authority.
 INSERT INTO score_change_proposals (
     score_change_id, claim_id, evidence_id, evaluation_version, dimension,
     old_value, proposed_value, rationale, proposed_by, proposed_by_type
@@ -21,7 +21,22 @@ INSERT INTO score_change_proposals (
     3, 4, 'Fixture proposal only.', 'test-model', 'AI_MODEL'
 );
 
--- P3: Semantic ND and NA are accepted and remain distinguishable.
+-- P3: A distinct human approver may approve that exact immutable proposal/version.
+INSERT INTO approval_events (
+    approval_event_id, claim_id, evidence_id, score_change_id, decision,
+    approver_identity, approver_actor_type, reviewer_role, approval_scope,
+    entity_version, rationale
+) VALUES (
+    '00000000-0000-0000-0000-000000000101',
+    'GNW-1', 'TEST-BASE-EVIDENCE', '00000000-0000-0000-0000-000000000001', 'APPROVE',
+    'human-reviewer-1', 'HUMAN', 'APPROVER', 'SCORE_CHANGE',
+    'test-positive', 'Human fixture approval of exact proposal version.'
+);
+
+-- P4: The approved exact proposal can authorize the corresponding canonical score mutation.
+UPDATE claims SET ed = 4 WHERE claim_id = 'GNW-1';
+
+-- P5: Semantic ND and NA are accepted and remain distinguishable.
 INSERT INTO evidence (
     evidence_id, source_id, population_id, finding, causal_manipulation, causal_manipulation_scope, cmc, oec, evidence_status
 ) VALUES (
