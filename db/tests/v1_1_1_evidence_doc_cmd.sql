@@ -35,7 +35,7 @@ WHERE evidence_id LIKE 'DC-%' AND score_effect <> 'NONE';
 
 SELECT 'dc006_causal_cap' AS violation, evidence_id AS detail
 FROM evidence
-WHERE evidence_id='DC-006' AND (causal_manipulation IS NOT FALSE OR cmc::text <> '3');
+WHERE evidence_id='DC-006' AND (causal_manipulation <> 'FALSE' OR cmc::text <> '3');
 
 SELECT 'negative_active_test_cap_violation' AS violation, evidence_id AS detail
 FROM evidence
