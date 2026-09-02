@@ -1,30 +1,41 @@
 BEGIN;
 
--- Canonical theory, target-relevance, population, and source rows are loaded before this
--- fixture. This file creates only the minimal claim/evidence records needed by the
--- generic positive and adversarial integrity tests.
+-- Test-only objects must never reuse frozen canonical claim/source identities.
+INSERT INTO theories (theory_id, name, status) VALUES
+('TEST-THEORY', 'Test Theory', 'ACTIVE');
+
+INSERT INTO target_relevance (target_relevance_id, label, description) VALUES
+('TR-TEST', 'Test-only relevance', 'Disposable CI fixture target relevance.');
 
 INSERT INTO claims (
     claim_id, theory_id, target_relevance_id, claim_text,
     operational_feasibility, ps, ed, ci, ir, rd, rr
 ) VALUES (
-    'GNW-1', 'GNWT', 'TR-CA-MECH',
-    'Fixture claim preserving v1.1.1 score components for GNW-1.',
+    'TEST-CLAIM', 'TEST-THEORY', 'TR-TEST',
+    'Disposable fixture claim for database integrity tests.',
     3, 3, 3, 2, 3, 2, 1
 );
 
 INSERT INTO claim_claim_types (claim_id, claim_type, ordinal) VALUES
-('GNW-1', 'M', 1);
+('TEST-CLAIM', 'M', 1);
 
 INSERT INTO claim_theory_roles (claim_id, theory_role) VALUES
-('GNW-1', 'ACC');
+('TEST-CLAIM', 'ACC');
+
+INSERT INTO sources (
+    source_id, title, source_class, closure_status, source_kind,
+    primary_use, registry_text, source_artifact
+) VALUES (
+    'SRC-999', 'Disposable CI fixture source', 'TEST', 'CLOSED', 'SINGLE_WORK',
+    'Database integrity testing only', 'Test-only source; not part of v1.1.1.', 'CI fixture'
+);
 
 INSERT INTO evidence (
     evidence_id, source_id, population_id, finding, causal_manipulation,
     consciousness_sensitive_convergence, preregistered, independent_replication,
     cmc, oec, evidence_status
 ) VALUES (
-    'TEST-BASE-EVIDENCE', 'SRC-001', 'ANESTHESIA', 'Baseline fixture evidence.',
+    'TEST-BASE-EVIDENCE', 'SRC-999', 'ANESTHESIA', 'Baseline fixture evidence.',
     FALSE, FALSE, 'ND', 'ND', '3', 'NA', 'VALIDATED'
 );
 
