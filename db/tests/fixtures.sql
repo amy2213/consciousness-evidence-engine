@@ -36,7 +36,7 @@ INSERT INTO evidence (
     cmc, oec, evidence_status
 ) VALUES (
     'TEST-BASE-EVIDENCE', 'SRC-999', 'ANESTHESIA', 'Baseline fixture evidence.',
-    FALSE, FALSE, 'ND', 'ND', '3', 'NA', 'VALIDATED'
+    'FALSE', FALSE, 'ND', 'ND', '3', 'NA', 'VALIDATED'
 );
 
 COMMIT;
