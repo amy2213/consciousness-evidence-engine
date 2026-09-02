@@ -33,10 +33,18 @@ INSERT INTO sources (
 INSERT INTO evidence (
     evidence_id, source_id, population_id, finding, causal_manipulation,
     consciousness_sensitive_convergence, preregistered, independent_replication,
-    cmc, oec, evidence_status
+    cmc, oec, evidence_status, ledger_version
 ) VALUES (
     'TEST-BASE-EVIDENCE', 'SRC-999', 'ANESTHESIA', 'Baseline fixture evidence.',
-    'FALSE', FALSE, 'ND', 'ND', '3', 'NA', 'VALIDATED'
+    'FALSE', FALSE, 'ND', 'ND', '3', 'NA', 'VALIDATED', 'test-positive'
+);
+
+INSERT INTO claim_evidence (
+    claim_id, evidence_id, evaluation_version, relationship,
+    interpretation, score_effect, review_status
+) VALUES (
+    'TEST-CLAIM', 'TEST-BASE-EVIDENCE', 'test-positive', 'SUPPORT',
+    'Disposable exact claim/evidence/version link for authority tests.', 'SUPPORT', 'PENDING'
 );
 
 COMMIT;
