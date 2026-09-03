@@ -1,19 +1,7 @@
 -- Phase 13 positive and reconciliation tests.
 
-INSERT INTO bibliographic_works(work_id,authors,title,venue,year,bibliographic_status,notes)
-VALUES ('WORK-999','CI fixture','Disposable provenance work','CI',2026,'CLOSED','Test only.');
-INSERT INTO source_works(source_id,work_id,ordinal,relationship)
-VALUES ('SRC-999','WORK-999',1,'MEMBER');
-
 INSERT INTO provenance_events(provenance_event_id,entity_type,entity_id,actor_type,actor_identity,action,metadata)
-VALUES
-('00000000-0000-0000-0000-000000000801','SOURCE_LOCATOR','TEST-LOCATOR','SYSTEM','ci-provenance','FIXTURE_CREATE','{"fixture":true}'::jsonb),
-('00000000-0000-0000-0000-000000000802','CLAIM_EVIDENCE','TEST-CLAIM:TEST-BASE-EVIDENCE:test-positive','HUMAN','human-interpretation-reviewer','APPROVAL_REVIEW','{"fixture":true}'::jsonb);
-
-INSERT INTO source_locators(source_locator_id,source_id,work_id,locator_type,locator_text,content_hash,provenance_event_id)
-VALUES ('00000000-0000-0000-0000-000000000811','SRC-999','WORK-999','RESULT','Fixture result locator','fixture-locator-hash','00000000-0000-0000-0000-000000000801');
-INSERT INTO evidence_source_locations(evidence_id,source_locator_id,is_primary,rationale)
-VALUES ('TEST-BASE-EVIDENCE','00000000-0000-0000-0000-000000000811',TRUE,'Exact CI work-level locator.');
+VALUES ('00000000-0000-0000-0000-000000000802','CLAIM_EVIDENCE','TEST-CLAIM:TEST-BASE-EVIDENCE:test-positive','HUMAN','human-interpretation-reviewer','APPROVAL_REVIEW','{"fixture":true}'::jsonb);
 
 INSERT INTO approval_events(
  approval_event_id,claim_id,evidence_id,decision,approver_identity,approver_actor_type,reviewer_role,
@@ -46,7 +34,7 @@ AND NOT EXISTS (
    AND rpp.evidence_id='TEST-BASE-EVIDENCE'
    AND rpp.source_id='SRC-999'
    AND rpp.work_id='WORK-999'
-   AND rpp.locator_text='Fixture result locator'
+   AND rpp.locator_text='Test fixture exact locator'
 );
 
 SELECT 'APPROVED_INTERPRETATION_HASH_DRIFT' AS violation,approved_interpretation_id::text AS detail
