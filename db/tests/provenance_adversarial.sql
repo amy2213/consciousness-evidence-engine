@@ -4,7 +4,7 @@ DECLARE msg text;
 BEGIN
   BEGIN
     UPDATE source_locators SET locator_text='rewritten locator'
-    WHERE source_locator_id='00000000-0000-0000-0000-000000000811';
+    WHERE source_locator_id='00000000-0000-0000-0000-000000001301';
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS msg=MESSAGE_TEXT;
     IF position('source_locators is append-only provenance state' in msg)=0 THEN
@@ -38,7 +38,7 @@ DECLARE msg text;
 BEGIN
   BEGIN
     INSERT INTO evidence_source_locations(evidence_id,source_locator_id,is_primary,rationale)
-    SELECT 'TEST-SEMANTIC-NULLS','00000000-0000-0000-0000-000000000811',FALSE,'hostile wrong-source link';
+    VALUES ('TEST-SEMANTIC-NULLS','00000000-0000-0000-0000-000000001301',FALSE,'hostile wrong-source link');
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS msg=MESSAGE_TEXT;
     IF position('evidence source locator must belong to the evidence source container' in msg)=0 THEN
