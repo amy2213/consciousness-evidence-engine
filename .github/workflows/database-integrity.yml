@@ -2,7 +2,7 @@ name: Database integrity
 
 on:
   push:
-    branches: [main, "foundation/**"]
+    branches: [main, "foundation/**", "migration/**"]
   pull_request:
 
 permissions:
@@ -39,5 +39,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
+      - name: Run populated 0003 upgrade-path test
+        run: bash scripts/test-upgrade-0003.sh
+
       - name: Run database integrity suite
         run: bash scripts/test-db.sh
+
+      - name: Reconcile generated core-rules artifact
+        run: |
+          bash scripts/render-core-rules.sh > /tmp/core-rules.yaml
+          diff -u rules/core-rules.yaml /tmp/core-rules.yaml

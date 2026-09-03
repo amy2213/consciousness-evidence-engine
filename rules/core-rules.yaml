@@ -1,71 +1,109 @@
-version: 0.1
+# GENERATED FILE. DO NOT EDIT BY HAND.
+# Canonical source: public.rules after all migrations.
+version: 1.0
 rules:
   - id: R-001
     name: correlation_is_not_causation
     severity: BLOCK
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-001
     statement: Correlational evidence cannot independently satisfy a causal claim.
 
   - id: R-002
     name: contribution_is_not_necessity
     severity: BLOCK
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-002
     statement: Evidence of causal contribution cannot independently establish necessity.
 
   - id: R-003
     name: necessity_is_not_sufficiency
     severity: BLOCK
-    statement: Evidence supporting necessity cannot independently establish sufficiency.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-003
+    statement: Necessity evidence cannot independently establish sufficiency.
 
   - id: R-004
     name: cognition_is_not_phenomenality
     severity: BLOCK
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-004
     statement: General cognitive or perceptual evidence cannot independently promote a phenomenal claim.
 
   - id: R-005
     name: component_is_not_whole_theory
     severity: BLOCK
-    statement: Evidence for one theory component cannot be promoted to confirmation of the full theory.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-005
+    statement: Evidence for one component cannot confirm the whole theory.
 
   - id: R-006
     name: source_required_for_score_increase
     severity: BLOCK
-    statement: A canonical claim score cannot increase unless the supporting evidence resolves to a registered source and exact claim link.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claims_score_change_provenance_gate
+    statement: Score increase requires exact registered source and claim/evidence link.
 
   - id: R-007
     name: cmc_four_requires_causal_triangulation
     severity: BLOCK
-    statement: CMC 4 requires causal manipulation or perturbation plus convergent consciousness-sensitive measurement and preregistered or independently replicated support.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: evidence_cmc_four_full_gate
+    statement: CMC4 requires causal manipulation, consciousness-sensitive convergence, and preregistration or independent replication.
 
   - id: R-008
     name: negative_active_task_asymmetry
     severity: BLOCK
-    statement: A negative demanding active-task result cannot support absence-directed CMC above 1 unless sensitivity, state quality, and major false-negative pathways are independently constrained.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-008
+    statement: Negative demanding active-task evidence has an absence-inference cap.
 
   - id: R-009
     name: oec_cmc_firewall
     severity: BLOCK
-    statement: An increase in Organizational Evidence Confidence does not imply or automatically cause an increase in Consciousness Measurement Confidence.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-009
+    statement: Organizational evidence confidence cannot automatically promote consciousness measurement confidence.
 
   - id: R-010
     name: organizational_complexity_not_consciousness
     severity: BLOCK
-    statement: Differentiation, integration, recurrence, prediction, memory, learning, or complex dynamics cannot independently establish phenomenality.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-004
+    statement: Organizational complexity cannot independently establish phenomenality.
 
   - id: R-011
     name: canonical_claim_role
     severity: ERROR
-    statement: Population views must inherit Theory Role from the canonical claim record and may not redefine it.
+    enforcement_kind: RELATIONAL_CONSTRAINT
+    enforcement_artifact: claim_version_theory_roles+claim_theory_roles canonical role constraints
+    statement: Views may not redefine canonical Theory Role.
 
   - id: R-012
     name: typed_null_semantics
     severity: ERROR
-    statement: NA means not applicable; ND means applicable but not determined; database NULL must not substitute for either semantic state.
+    enforcement_kind: RELATIONAL_CONSTRAINT
+    enforcement_artifact: tri_state_code+scored_or_semantic_code typed domain constraints
+    statement: ND and NA retain distinct scientific meanings.
 
   - id: R-013
     name: no_ai_direct_commit
     severity: BLOCK
-    statement: AI-produced extraction or scoring must remain candidate data until explicit review and approval.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: approval_authority_gate
+    statement: AI-assisted work cannot issue authoritative scientific approval.
 
   - id: R-014
     name: score_change_requires_audit
     severity: BLOCK
-    statement: Any accepted change to PS, ED, CI, IR, RD, RR, ESI, STI, or RPS must generate an immutable audit event with rationale and provenance.
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claims_score_change_audit_emit
+    statement: Accepted score changes require immutable audit history.
+
+  - id: R-015
+    name: synthetic_mechanism_is_not_experience
+    severity: BLOCK
+    enforcement_kind: TRIGGER_FUNCTION
+    enforcement_artifact: claim_evidence_epistemic_gate:R-015
+    statement: Implementation of a mechanism in a synthetic system does not establish experience.
+
