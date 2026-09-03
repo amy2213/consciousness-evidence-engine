@@ -44,3 +44,8 @@ jobs:
 
       - name: Run database integrity suite
         run: bash scripts/test-db.sh
+
+      - name: Reconcile generated core-rules artifact
+        run: |
+          bash scripts/render-core-rules.sh > /tmp/core-rules.yaml
+          diff -u rules/core-rules.yaml /tmp/core-rules.yaml
