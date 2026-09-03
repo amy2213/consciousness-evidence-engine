@@ -10,7 +10,7 @@ AND NOT EXISTS (
    AND rpp.evidence_id='TEST-BASE-EVIDENCE'
    AND rpp.source_id='SRC-999'
    AND rpp.work_id='WORK-999'
-   AND rpp.locator_text='Fixture result locator'
+   AND rpp.locator_text='Test fixture exact locator'
 );
 
 SELECT 'APPROVED_INTERPRETATION_HASH_DRIFT' AS violation,approved_interpretation_id::text AS detail
