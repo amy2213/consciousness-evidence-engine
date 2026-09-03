@@ -35,8 +35,8 @@ echo "[28/47] Reconciling measurement layer"; run_zero_row_gate "Measurement lay
 echo "[29/47] Attacking measurement consciousness firewall"; "${PSQL[@]}" -f db/tests/measurement_layer_adversarial.sql
 echo "[30/47] Reconciling anesthesia + sleep evidence"; run_zero_row_gate "Anesthesia/sleep evidence reconciliation" db/tests/v1_1_1_evidence_anesthesia_sleep.sql
 echo "[31/47] Reconciling DoC/CMD evidence"; run_zero_row_gate "DoC/CMD evidence reconciliation" db/tests/v1_1_1_evidence_doc_cmd.sql
-echo "[32/47] Reconciling boundary evidence"; run_zero_row_gate "Split-brain boundary reconciliation" db/tests/v1_1_1_evidence_split_brain.sql
-echo "[33/47] Loading isolated test fixtures"; "${PSQL[@]}" -f db/tests/fixtures.sql
+echo "[32/47] Reconciling boundary evidence and frozen work-level locators"; run_zero_row_gate "Split-brain boundary reconciliation" db/tests/v1_1_1_evidence_split_brain.sql; "${PSQL[@]}" -f db/seed/v1_1_1_source_locators.sql
+echo "[33/47] Loading isolated test and provenance fixtures"; "${PSQL[@]}" -f db/tests/fixtures.sql; "${PSQL[@]}" -f db/tests/provenance_fixtures.sql
 echo "[34/47] Running positive acceptance fixtures"; "${PSQL[@]}" -f db/tests/positive.sql
 echo "[35/47] Building and reconciling end-to-end provenance path"; run_zero_row_gate "End-to-end provenance" db/tests/end_to_end_provenance.sql
 echo "[36/47] Attacking provenance immutability and source binding"; "${PSQL[@]}" -f db/tests/provenance_adversarial.sql
