@@ -16,11 +16,31 @@ INSERT INTO claims (
     3, 3, 3, 2, 3, 2, 1
 );
 
-INSERT INTO claim_claim_types (claim_id, claim_type, ordinal) VALUES
-('TEST-CLAIM', 'M', 1);
+INSERT INTO claim_claim_types (claim_id, claim_type, ordinal) VALUES ('TEST-CLAIM', 'M', 1);
+INSERT INTO claim_theory_roles (claim_id, theory_role) VALUES ('TEST-CLAIM', 'ACC');
 
-INSERT INTO claim_theory_roles (claim_id, theory_role) VALUES
-('TEST-CLAIM', 'ACC');
+-- Phase 7 requires score state to bind to an explicit claim version.
+INSERT INTO specification_versions(specification_version_id,title,status,source_artifact,rationale)
+VALUES ('test-positive','Disposable CI specification','DRAFT','CI fixture','Test-only version scope.');
+INSERT INTO theory_versions(theory_version_id,theory_id,specification_version_id,name,status,rationale)
+VALUES ('TV-TEST','TEST-THEORY','test-positive','Test Theory','DRAFT','Disposable CI theory version.');
+INSERT INTO claim_versions(
+ claim_version_id,claim_id,theory_version_id,specification_version_id,version_label,
+ claim_text,logical_falsifier,operational_test,operational_feasibility,target_relevance_id,status,rationale
+) VALUES (
+ 'CV-TEST','TEST-CLAIM','TV-TEST','test-positive','test-positive',
+ 'Disposable fixture claim for database integrity tests.','Disposable falsifier.','Disposable operational test.',3,'TR-TEST','DRAFT','Disposable CI claim version.'
+);
+INSERT INTO claim_version_types VALUES ('CV-TEST','M',1);
+INSERT INTO claim_version_theory_roles VALUES ('CV-TEST','ACC');
+
+INSERT INTO claim_score_snapshots(
+ score_snapshot_id,claim_id,claim_version_id,specification_version_id,revision,snapshot_kind,
+ ps,ed,ci,ir,rd,rr,evaluator_identity,evaluator_actor_type,rationale
+) VALUES (
+ '00000000-0000-0000-0000-000000000701','TEST-CLAIM','CV-TEST','test-positive',1,'BASELINE_IMPORT',
+ 3,3,2,3,2,1,'CI fixture','SYSTEM','Disposable initial score state.'
+);
 
 INSERT INTO sources (
     source_id, title, source_class, closure_status, source_kind,
