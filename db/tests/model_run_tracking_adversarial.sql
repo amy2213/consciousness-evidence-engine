@@ -9,9 +9,10 @@ VALUES ('00000000-0000-0000-0000-000000000930','MODEL_RUN','00000000-0000-0000-0
 INSERT INTO model_runs(model_run_id,actor_identity,actor_version,provider,model_name,model_version,task_type,specification_version_id,input_hash,output_hash,configuration_hash,prompt_or_protocol_id,run_disposition)
 VALUES ('00000000-0000-0000-0000-000000000931','test-model','1','fixture-provider','fixture-model','1','EXTRACTION','test-positive','input-hash','output-hash','config-hash','fixture-protocol','PENDING_HUMAN_REVIEW');
 
+-- Exact reason matters: model output cannot acquire a non-pending disposition unless a HUMAN provenance event matches the disposition actor.
 SELECT model_run_expect_failure('MODEL_CANNOT_SELF_DISPOSE',
 $$UPDATE model_runs SET run_disposition='ACCEPTED_AS_CANDIDATE',disposition_actor_type='AI_MODEL',disposition_actor_identity='test-model',disposition_rationale='self approval',disposition_provenance_event_id='00000000-0000-0000-0000-000000000930' WHERE model_run_id='00000000-0000-0000-0000-000000000931'$$,
-'violates check constraint "model_run_disposition_review"');
+'model-run disposition requires matching HUMAN provenance event');
 
 SELECT model_run_expect_failure('AUTHORITATIVE_LINK_REQUIRES_HUMAN_DISPOSITION',
 $$INSERT INTO authoritative_model_run_links(authoritative_model_run_link_id,model_run_id,entity_type,entity_id,relationship,human_disposition_provenance_event_id,rationale) VALUES ('00000000-0000-0000-0000-000000000932','00000000-0000-0000-0000-000000000931','EVIDENCE','TEST-BASE-EVIDENCE','INFORMED','00000000-0000-0000-0000-000000000930','hostile')$$,
